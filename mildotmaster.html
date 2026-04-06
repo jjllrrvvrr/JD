@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mil-Dot Master</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Specific styles for Mil-Dot Master */
+        .controls {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        select, input[type="number"] {
+            padding: 12px 15px;
+            border: 2px solid var(--input-border);
+            border-radius: 6px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            min-width: 180px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        input[type="number"] {
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .custom-size {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .custom-size.visible {
+            display: block;
+        }
+
+        .slide-rule-container {
+            background-color: var(--cell-bg);
+            border: 3px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px 20px;
+            position: relative;
+            box-shadow: var(--shadow);
+            margin-bottom: 30px;
+            user-select: none;
+        }
+
+        .scale-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .scale-label.bottom {
+            margin-top: 10px;
+            margin-bottom: 0;
+        }
+
+        .ruler-wrapper {
+            position: relative;
+            height: 120px;
+            background: linear-gradient(to bottom, var(--card-bg) 0%, var(--card-bg) 50%, var(--cell-bg) 50%, var(--cell-bg) 100%);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .scale-fixed {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            display: flex;
+            align-items: flex-start;
+            padding-top: 5px;
+        }
+
+        .scale-sliding {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 50%;
+            width: 200%;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 5px;
+            transition: transform 0.1s ease-out;
+            cursor: grab;
+        }
+
+        .scale-sliding:active {
+            cursor: grabbing;
+        }
+
+        .tick {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tick-line {
+            width: 2px;
+            background-color: var(--accent-color);
+        }
+
+        .scale-fixed .tick-line {
+            height: 15px;
+            margin-bottom: 3px;
+        }
+
+        .scale-sliding .tick-line {
+            height: 15px;
+            margin-bottom: 3px;
+        }
+
+        .tick-line.major {
+            width: 3px;
+            height: 25px;
+        }
+
+        .tick-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        .cursor {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background-color: var(--alert-color);
+            transform: translateX(-50%);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .cursor::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid var(--alert-color);
+        }
+
+        .cursor::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 12px solid var(--alert-color);
+        }
+
+        .reading-window {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--card-bg);
+            border: 2px solid var(--alert-color);
+            border-radius: 6px;
+            padding: 8px 15px;
+            text-align: center;
+            z-index: 11;
+            box-shadow: var(--shadow);
+        }
+
+        .reading-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--alert-color);
+            font-family: 'Courier New', monospace;
+        }
+
+        .reading-label {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-display {
+            background-color: var(--accent-color);
+            color: var(--bg-color);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .result-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        .result-unit {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .formula {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .formula strong {
+            color: var(--text-color);
+        }
+
+        .mils-input-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .slider-container {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            -webkit-appearance: none;
+            background: var(--border-color);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .mils-number {
+            width: 80px !important;
+            min-width: 80px !important;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .mils-input-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .slider-container {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .result-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-title">
+                <img src="logo.png" alt="Logo" class="logo">
+                <div>
+                    <h1>MIL-DOT MASTER</h1>
+                    <div class="subtitle">Linear Distance Estimation Calculator</div>
+                </div>
+            </div>
+            <div class="theme-toggle">
+                <button class="toggle-btn" id="themeToggle" data-active="false" aria-label="Toggle dark mode"><span class="slider"></span></button>
+            </div>
+        </header>
+
+        <div class="controls">
+            <div class="input-group">
+                <label for="targetSize">Target Size</label>
+                <select id="targetSize">
+                    <option value="180" selected>Standing man (180 cm)</option>
+                    <option value="120">Crouched man (120 cm)</option>
+                    <option value="90">Backpack (90 cm)</option>
+                    <option value="50">Head/shoulders (50 cm)</option>
+                    <option value="30">Head only (30 cm)</option>
+                    <option value="25">Helmet (25 cm)</option>
+                    <option value="150">Tire diameter (150 cm)</option>
+                    <option value="400">Vehicle width (400 cm)</option>
+                    <option value="custom">Custom size...</option>
+                </select>
+                <input type="number" id="customSize" class="custom-size" placeholder="cm" min="1" max="500">
+            </div>
+
+            <div class="input-group">
+                <label for="milsInput">Mils Observed</label>
+                <div class="mils-input-container">
+                    <div class="slider-container">
+                        <input type="range" id="milsSlider" min="0.1" max="10" step="0.1" value="2.5">
+                    </div>
+                    <input type="number" id="milsInput" class="mils-number" min="0.1" max="10" step="0.1" value="2.5" placeholder="2.5">
+                </div>
+            </div>
+        </div>
+
+        <div class="slide-rule-container">
+            <div class="scale-label">▼ Drag to align values</div>
+            
+            <div class="ruler-wrapper" id="rulerWrapper">
+                <div class="scale-sliding" id="distanceScale">
+                    <!-- Distance ticks generated by JS -->
+                </div>
+                
+                <div class="cursor">
+                    <div class="reading-window">
+                        <div class="reading-value" id="readingValue">--</div>
+                        <div class="reading-label">meters</div>
+                    </div>
+                </div>
+                
+                <div class="scale-fixed" id="milsScale">
+                    <!-- Mils ticks generated by JS -->
+                </div>
+            </div>
+            
+            <div class="scale-label bottom">▲ Mils Scale (Fixed)</div>
+        </div>
+
+        <div class="result-display">
+            <div class="result-value">
+                <span id="finalResult">720</span>
+                <span class="result-unit">m</span>
+            </div>
+        </div>
+
+        <div class="formula">
+            <strong>Formula:</strong> (<span id="sizeDisplay">180</span> cm × 10) ÷ <span id="milsDisplay">2.5</span> mils = <strong><span id="calcResult">720</span> m</strong>
+        </div>
+    </div>
+
+    <script>
+        // Target sizes
+        const targetSizes = {
+            '180': { name: 'Standing man (180 cm)', cm: 180 },
+            '120': { name: 'Crouched man (120 cm)', cm: 120 },
+            '90': { name: 'Backpack (90 cm)', cm: 90 },
+            '50': { name: 'Head/shoulders (50 cm)', cm: 50 },
+            '30': { name: 'Head only (30 cm)', cm: 30 },
+            '25': { name: 'Helmet (25 cm)', cm: 25 },
+            '150': { name: 'Tire diameter (150 cm)', cm: 150 },
+            '400': { name: 'Vehicle width (400 cm)', cm: 400 }
+        };
+
+        // Current state
+        let currentSize = 180;
+        let currentMils = 2.5;
+        let isDragging = false;
+        let startX = 0;
+        let currentOffset = 0;
+
+        // DOM elements
+        const targetSizeSelect = document.getElementById('targetSize');
+        const customSizeInput = document.getElementById('customSize');
+        const milsInput = document.getElementById('milsInput');
+        const milsSlider = document.getElementById('milsSlider');
+        const distanceScale = document.getElementById('distanceScale');
+        const milsScale = document.getElementById('milsScale');
+        const rulerWrapper = document.getElementById('rulerWrapper');
+        const readingValue = document.getElementById('readingValue');
+        const finalResult = document.getElementById('finalResult');
+        const sizeDisplay = document.getElementById('sizeDisplay');
+        const milsDisplay = document.getElementById('milsDisplay');
+        const calcResult = document.getElementById('calcResult');
+        const themeToggle = document.getElementById('themeToggle');
+
+        // Initialize
+        function init() {
+            loadTheme();
+            generateMilsScale();
+            updateCalculation();
+            setupEventListeners();
+        }
+
+        // Theme toggle functions
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('sniperTheme');
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                themeToggle.setAttribute('data-active', 'true');
+            }
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                html.removeAttribute('data-theme');
+                themeToggle.setAttribute('data-active', 'false');
+                localStorage.setItem('sniperTheme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeToggle.setAttribute('data-active', 'true');
+                localStorage.setItem('sniperTheme', 'dark');
+            }
+        }
+
+        // Generate mils scale (fixed, logarithmic)
+        function generateMilsScale() {
+            const milsValues = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 
+                               1, 1.2, 1.4, 1.6, 1.8, 2, 2.5, 3, 3.5, 4, 4.5, 5, 6, 7, 8, 9, 10];
+            
+            milsScale.innerHTML = '';
+            
+            milsValues.forEach(mil => {
+                const tick = document.createElement('div');
+                tick.className = 'tick';
+                const position = milToPosition(mil);
+                tick.style.left = `${position}%`;
+                
+                const line = document.createElement('div');
+                line.className = 'tick-line';
+                if (mil % 1 === 0 || mil === 0.5) {
+                    line.classList.add('major');
+                }
+                
+                const label = document.createElement('div');
+                label.className = 'tick-label';
+                label.textContent = mil;
+                
+                tick.appendChild(line);
+                tick.appendChild(label);
+                milsScale.appendChild(tick);
+            });
+        }
+
+        // Generate distance scale (sliding, based on target size)
+        function generateDistanceScale(size) {
+            const distances = [];
+            for (let d = 3000; d >= 100; d -= 50) {
+                if (d >= 1000 && d % 250 === 0) distances.push(d);
+                else if (d < 1000 && d % 100 === 0) distances.push(d);
+            }
+            
+            distanceScale.innerHTML = '';
+            
+            distances.forEach(dist => {
+                const tick = document.createElement('div');
+                tick.className = 'tick';
+                const mils = (size * 10) / dist;
+                const position = milToPosition(mils);
+                tick.style.left = `${position}%`;
+                
+                const line = document.createElement('div');
+                line.className = 'tick-line';
+                if (dist % 500 === 0) {
+                    line.classList.add('major');
+                }
+                
+                const label = document.createElement('div');
+                label.className = 'tick-label';
+                label.textContent = dist;
+                
+                tick.appendChild(line);
+                tick.appendChild(label);
+                distanceScale.appendChild(tick);
+            });
+        }
+
+        // Convert mils to position percentage (logarithmic scale)
+        function milToPosition(mil) {
+            const minLog = Math.log10(0.1);
+            const maxLog = Math.log10(10);
+            const milLog = Math.log10(mil);
+            return ((milLog - minLog) / (maxLog - minLog)) * 100;
+        }
+
+        // Calculate distance
+        function calculateDistance(size, mils) {
+            return Math.round((size * 10) / mils);
+        }
+
+        // Update all displays
+        function updateCalculation() {
+            const distance = calculateDistance(currentSize, currentMils);
+            
+            readingValue.textContent = distance;
+            finalResult.textContent = distance;
+            
+            sizeDisplay.textContent = currentSize;
+            milsDisplay.textContent = currentMils;
+            calcResult.textContent = distance;
+            
+            generateDistanceScale(currentSize);
+            
+            const milsPosition = milToPosition(currentMils);
+            const offset = 50 - milsPosition;
+            distanceScale.style.transform = `translateX(${offset}%)`;
+        }
+
+        // Event listeners
+        function setupEventListeners() {
+            targetSizeSelect.addEventListener('change', (e) => {
+                if (e.target.value === 'custom') {
+                    customSizeInput.classList.add('visible');
+                    customSizeInput.focus();
+                } else {
+                    customSizeInput.classList.remove('visible');
+                    currentSize = parseInt(e.target.value);
+                    updateCalculation();
+                }
+            });
+
+            customSizeInput.addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                if (value && value > 0) {
+                    currentSize = value;
+                    updateCalculation();
+                }
+            });
+
+            milsInput.addEventListener('input', (e) => {
+                let value = parseFloat(e.target.value);
+                if (value && value >= 0.1 && value <= 10) {
+                    currentMils = value;
+                    milsSlider.value = value;
+                    updateCalculation();
+                }
+            });
+
+            milsSlider.addEventListener('input', (e) => {
+                currentMils = parseFloat(e.target.value);
+                milsInput.value = currentMils;
+                updateCalculation();
+            });
+
+            themeToggle.addEventListener('click', toggleTheme);
+
+            rulerWrapper.addEventListener('mousedown', startDrag);
+            rulerWrapper.addEventListener('touchstart', startDrag, { passive: false });
+            
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('touchmove', drag, { passive: false });
+            
+            document.addEventListener('mouseup', endDrag);
+            document.addEventListener('touchend', endDrag);
+        }
+
+        // Drag functions
+        function startDrag(e) {
+            isDragging = true;
+            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            currentOffset = parseFloat(distanceScale.style.transform.replace('translateX(', '').replace('%)', '')) || 0;
+            rulerWrapper.style.cursor = 'grabbing';
+        }
+
+        function drag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            
+            const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const deltaX = clientX - startX;
+            const wrapperWidth = rulerWrapper.offsetWidth;
+            const deltaPercent = (deltaX / wrapperWidth) * 100;
+            
+            const newOffset = currentOffset + deltaPercent;
+            const centerPosition = 50 - newOffset;
+            
+            const minLog = Math.log10(0.1);
+            const maxLog = Math.log10(10);
+            const milLog = (centerPosition / 100) * (maxLog - minLog) + minLog;
+            let newMils = Math.pow(10, milLog);
+            
+            newMils = Math.max(0.1, Math.min(10, newMils));
+            
+            currentMils = Math.round(newMils * 10) / 10;
+            milsInput.value = currentMils;
+            milsSlider.value = currentMils;
+            
+            updateCalculation();
+            startX = clientX;
+        }
+
+        function endDrag() {
+            isDragging = false;
+            rulerWrapper.style.cursor = 'grab';
+        }
+
+        // Initialize
+        init();
+    </script>
+</body>
+</html>
