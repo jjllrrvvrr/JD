@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNIPER - JUDGING DISTING</title>
+    <style>
+        :root {
+            --bg-color: #f5f5f5;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: #e0e0e0;
+            --input-bg: #ffffff;
+            --input-border: #cccccc;
+            --accent-color: #2c3e50;
+            --accent-hover: #34495e;
+            --minus-color: #e74c3c;
+            --plus-color: #27ae60;
+            --alert-color: #e67e22;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --percent-badge-bg: #ecf0f1;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #e0e0e0;
+            --text-secondary: #aaaaaa;
+            --border-color: #404040;
+            --input-bg: #3d3d3d;
+            --input-border: #505050;
+            --accent-color: #5dade2;
+            --accent-hover: #3498db;
+            --minus-color: #ec7063;
+            --plus-color: #58d68d;
+            --alert-color: #f39c12;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --percent-badge-bg: #404040;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: auto;
+            height: auto;
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: contain;
+            transform: scale(0.8);
+            transform-origin: left center;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 480px) {
+            .logo {
+                transform: scale(1);
+            }
+
+            .logo:hover {
+                transform: scale(1.05);
+            }
+
+            .logo:hover {
+                transform: scale(0.85);
+            }
+
+            .logo-title {
+                gap: 10px;
+            }
+        }
+
+        h1 {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .theme-toggle span {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .toggle-btn {
+            width: 50px;
+            height: 26px;
+            background-color: var(--border-color);
+            border-radius: 13px;
+            position: relative;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        .toggle-btn[data-active="true"] {
+            background-color: var(--accent-color);
+        }
+
+        .toggle-btn::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-btn[data-active="true"]::after {
+            transform: translateX(24px);
+        }
+
+        .row {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s ease;
+            flex-wrap: wrap;
+        }
+
+        .row.alert {
+            border-left: 4px solid var(--alert-color);
+            background-color: rgba(230, 126, 34, 0.1);
+        }
+
+        .row-label {
+            font-weight: 600;
+            min-width: 60px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .input-group {
+            flex: 1;
+            min-width: 120px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid var(--input-border);
+            border-radius: 6px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-size: 1rem;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
+        }
+
+        [data-theme="dark"] input[type="number"]:focus {
+            box-shadow: 0 0 0 3px rgba(93, 173, 226, 0.2);
+        }
+
+        .results {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 2;
+            min-width: 280px;
+            flex-wrap: wrap;
+        }
+
+        .result-item {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease;
+        }
+
+        .result-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: block;
+        }
+
+        .result-minus .result-value {
+            color: var(--minus-color);
+        }
+
+        .result-plus .result-value {
+            color: var(--plus-color);
+        }
+
+        .result-label {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 3px;
+        }
+
+        .percent-badge {
+            background-color: var(--percent-badge-bg);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .alert-indicator {
+            color: var(--alert-color);
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .row.alert .alert-indicator {
+            display: block;
+        }
+
+        .row.alert .alert-indicator::after {
+            content: '⚠️ >1000m';
+            font-size: 0.75rem;
+            margin-left: 5px;
+            font-weight: 600;
+        }
+
+        .reset-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .reset-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .reset-btn:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .reset-btn:active {
+            transform: scale(0.98);
+        }
+
+        .legend {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+
+        .legend h3 {
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-secondary);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.range1 { background-color: #e74c3c; }
+        .legend-dot.range2 { background-color: #f39c12; }
+        .legend-dot.range3 { background-color: #27ae60; }
+
+        .empty-state {
+            color: var(--text-secondary);
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .row-label {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+
+            .results {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .result-item {
+                flex: 1;
+            }
+
+            .percent-badge {
+                align-self: center;
+                margin: 10px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .results {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .result-item {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 8px 15px;
+            }
+
+            .result-value {
+                font-size: 1.1rem;
+            }
+
+            .result-label {
+                margin-top: 0;
+                font-size: 0.65rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-title">
+                <img src="logo.png" alt="Logo" class="logo">
+                <h1>JD CALCULATOR</h1>
+            </div>
+            <div class="theme-toggle">
+                <span>Mode sombre</span>
+                <button class="toggle-btn" id="themeToggle" data-active="false" aria-label="Basculer le mode sombre"></button>
+            </div>
+        </header>
+
+        <main id="rowsContainer">
+            <!-- Les 10 lignes seront générées par JavaScript -->
+        </main>
+
+        <div class="reset-section">
+            <button class="reset-btn" id="resetBtn">Reset</button>
+        </div>
+
+        <div class="legend">
+            <h3>Règles de calcul</h3>
+            <div class="legend-item">
+                <div class="legend-dot range1"></div>
+                <span>0 - 300m : ±15%</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot range2"></div>
+                <span>301 - 600m : ±10%</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot range3"></div>
+                <span>601 - 1000m : ±5%</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-dot range3"></div>
+                <span>> 1000m : ⚠️ Alerte + calcul à 5%</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion du thème
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('sniperTheme');
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                themeToggle.setAttribute('data-active', 'true');
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            if (isDark) {
+                html.removeAttribute('data-theme');
+                themeToggle.setAttribute('data-active', 'false');
+                localStorage.setItem('sniperTheme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeToggle.setAttribute('data-active', 'true');
+                localStorage.setItem('sniperTheme', 'dark');
+            }
+        }
+
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Génération des 10 lignes
+        const rowsContainer = document.getElementById('rowsContainer');
+
+        function createRow(index) {
+            const row = document.createElement('div');
+            row.className = 'row';
+            row.dataset.index = index;
+            
+            row.innerHTML = `
+                <div class="row-label">Target ${index + 1}</div>
+                <div class="input-group">
+                    <label for="distance-${index}">Distance (m)</label>
+                    <input type="number" id="distance-${index}" min="0" step="1" placeholder="0">
+                </div>
+                <div class="alert-indicator">⚠️</div>
+                <div class="results">
+                    <div class="result-item result-minus">
+                        <span class="result-value" id="minus-${index}">-</span>
+                        <div class="result-label">Moins %</div>
+                    </div>
+                    <div class="percent-badge" id="percent-${index}">-</div>
+                    <div class="result-item result-plus">
+                        <span class="result-value" id="plus-${index}">-</span>
+                        <div class="result-label">Plus %</div>
+                    </div>
+                </div>
+            `;
+            
+            return row;
+        }
+
+        // Créer les 10 lignes
+        for (let i = 0; i < 10; i++) {
+            rowsContainer.appendChild(createRow(i));
+        }
+
+        // Logique de calcul
+        function getPercent(distance) {
+            if (distance >= 0 && distance <= 300) {
+                return 15;
+            } else if (distance >= 301 && distance <= 600) {
+                return 10;
+            } else if (distance >= 601 && distance <= 1000) {
+                return 5;
+            } else {
+                return 5; // Au-delà de 1000m
+            }
+        }
+
+        function calculateValues(distance, percent) {
+            const minus = distance * (1 - percent / 100);
+            const plus = distance * (1 + percent / 100);
+            return {
+                minus: Math.round(minus),
+                plus: Math.round(plus)
+            };
+        }
+
+        function updateRow(index) {
+            const input = document.getElementById(`distance-${index}`);
+            const row = input.closest('.row');
+            const percentBadge = document.getElementById(`percent-${index}`);
+            const minusValue = document.getElementById(`minus-${index}`);
+            const plusValue = document.getElementById(`plus-${index}`);
+            
+            const distance = parseFloat(input.value);
+            
+            if (isNaN(distance) || distance === '') {
+                percentBadge.textContent = '-';
+                minusValue.textContent = '-';
+                plusValue.textContent = '-';
+                row.classList.remove('alert');
+                return;
+            }
+
+            // Vérifier si > 1000m
+            if (distance > 1000) {
+                row.classList.add('alert');
+            } else {
+                row.classList.remove('alert');
+            }
+
+            const percent = getPercent(distance);
+            const values = calculateValues(distance, percent);
+            
+            percentBadge.textContent = `±${percent}%`;
+            minusValue.textContent = values.minus;
+            plusValue.textContent = values.plus;
+        }
+
+        // Écouteurs d'événements pour chaque input
+        for (let i = 0; i < 10; i++) {
+            const input = document.getElementById(`distance-${i}`);
+            input.addEventListener('input', () => {
+                updateRow(i);
+                saveData();
+            });
+        }
+
+        // Sauvegarde dans localStorage
+        function saveData() {
+            const data = [];
+            for (let i = 0; i < 10; i++) {
+                const input = document.getElementById(`distance-${i}`);
+                data.push(input.value);
+            }
+            localStorage.setItem('sniperData', JSON.stringify(data));
+        }
+
+        // Chargement depuis localStorage
+        function loadData() {
+            const savedData = localStorage.getItem('sniperData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                for (let i = 0; i < 10 && i < data.length; i++) {
+                    const input = document.getElementById(`distance-${i}`);
+                    if (data[i]) {
+                        input.value = data[i];
+                        updateRow(i);
+                    }
+                }
+            }
+        }
+
+        // Bouton Reset
+        const resetBtn = document.getElementById('resetBtn');
+        resetBtn.addEventListener('click', () => {
+            if (confirm('Voulez-vous vraiment réinitialiser toutes les valeurs ?')) {
+                for (let i = 0; i < 10; i++) {
+                    const input = document.getElementById(`distance-${i}`);
+                    const row = input.closest('.row');
+                    const percentBadge = document.getElementById(`percent-${i}`);
+                    const minusValue = document.getElementById(`minus-${i}`);
+                    const plusValue = document.getElementById(`plus-${i}`);
+                    
+                    input.value = '';
+                    percentBadge.textContent = '-';
+                    minusValue.textContent = '-';
+                    plusValue.textContent = '-';
+                    row.classList.remove('alert');
+                }
+                localStorage.removeItem('sniperData');
+            }
+        });
+
+        // Initialisation
+        loadTheme();
+        loadData();
+    </script>
+</body>
+</html>
