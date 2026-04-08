@@ -113,7 +113,6 @@
     </div>
 
     <script>
-        // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
         const html = document.documentElement;
 
@@ -140,11 +139,10 @@
 
         themeToggle.addEventListener('click', toggleTheme);
 
-        // Game logic
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const center = {x: 250, y: 250};
-        const mil = 25;
+        const mil = 37.5;
 
         const zone0 = {w: 1*mil, h: 1*mil};
         const zone3 = {w: 3*mil, h: 4.5*mil};
@@ -224,38 +222,30 @@
             let dx = shot.x - center.x;
             let dy = shot.y - center.y;
             
-            // Convertir en mils
             let milX = Math.abs(dx) / mil;
             let milY = Math.abs(dy) / mil;
             
-            // Zone 0 (centre) - moins de 0.5 mil dans les deux axes
             if (milX <= 0.5 && milY <= 0.5)
                 return "/";
             
-            // Calculer les corrections séparément
             return buildCorrection(dx, dy, milX, milY);
         }
 
         function buildCorrection(dx, dy, milX, milY) {
-            let horiz = "";
-            let vert = "";
+            let horiz = "/";
+            let vert = "/";
             
-            // Correction horizontale (Left/Right) - mesurée depuis l'axe vertical
             if (milX > 0.5) {
                 let valX = milX <= 1.5 ? 3 : milX <= 2.25 ? 6 : 12;
                 horiz = dx > 0 ? "L" + valX : "R" + valX;
             }
             
-            // Correction verticale (Up/Down) - mesurée depuis l'axe horizontal
             if (milY > 0.5) {
                 let valY = milY <= 2.25 ? 3 : milY <= 3 ? 6 : 12;
                 vert = dy > 0 ? "U" + valY : "D" + valY;
             }
             
-            // Format de sortie
-            if (!vert && !horiz) return "/";
-            if (!vert) return horiz;
-            if (!horiz) return vert;
+            if (vert === "/" && horiz === "/") return "/";
             return vert + " " + horiz;
         }
 
@@ -322,12 +312,10 @@
                 document.getElementById("results").innerHTML = results.join("<br>");
             } catch (e) {
                 if (e.message === 'Aborted') {
-                    // Test was stopped intentionally - already reset by stopGame
                     return;
                 }
                 throw e;
             } finally {
-                // Only reset UI elements, don't clear results if test completed
                 isRunning = false;
                 abortController = null;
                 const btn = document.getElementById("startBtn");
