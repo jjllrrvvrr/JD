@@ -18,8 +18,8 @@
         
         .tab-btn {
             padding: 12px 30px;
-            border: 2px solid var(--border-color);
-            background-color: var(--card-bg);
+            border: 2px solid var(--border);
+            background-color: var(--bg-secondary);
             color: var(--text-secondary);
             border-radius: 50px;
             font-size: 0.9rem;
@@ -31,13 +31,13 @@
         }
         
         .tab-btn:hover {
-            border-color: var(--accent-color);
-            color: var(--text-color);
+            border-color: var(--text-primary);
+            color: var(--text-primary);
         }
         
         .tab-btn.active {
-            background-color: var(--accent-color);
-            border-color: var(--accent-color);
+            background-color: var(--text-primary);
+            border-color: var(--text-primary);
             color: var(--bg-color);
         }
         
@@ -52,7 +52,7 @@
         /* Table styles */
         .targets-table {
             width: 100%;
-            background-color: var(--card-bg);
+            background-color: var(--bg-secondary);
             border-radius: 12px;
             box-shadow: var(--shadow);
             overflow: hidden;
@@ -63,7 +63,7 @@
             grid-template-columns: 100px 1fr 120px 120px auto;
             gap: 10px;
             padding: 15px 20px;
-            background-color: var(--accent-color);
+            background-color: var(--text-primary);
             color: var(--bg-color);
             font-weight: 600;
             font-size: 0.85rem;
@@ -76,7 +76,7 @@
             grid-template-columns: 100px 1fr 120px 120px auto;
             gap: 10px;
             padding: 12px 20px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
             align-items: center;
             transition: background-color 0.2s ease;
         }
@@ -86,7 +86,7 @@
         }
 
         .table-row:hover {
-            background-color: var(--cell-bg);
+            background-color: var(--bg-secondary);
         }
 
         .table-row.alert {
@@ -106,10 +106,10 @@
             width: 100%;
             height: 46px;
             padding: 0 12px;
-            border: 2px solid var(--input-border);
+            border: 2px solid var(--border);
             border-radius: 8px;
-            background-color: var(--input-bg);
-            color: var(--text-color);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
             font-size: 1.1rem;
             text-align: center;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
@@ -117,7 +117,7 @@
 
         .cell-input input:focus {
             outline: none;
-            border-color: var(--accent-color);
+            border-color: var(--text-primary);
             box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1);
         }
 
@@ -129,12 +129,12 @@
             text-align: center;
             height: 46px;
             padding: 0 12px;
-            background-color: var(--cell-bg);
-            border: 2px solid var(--cell-border);
+            background-color: var(--bg-secondary);
+            border: 2px solid var(--border);
             border-radius: 8px;
             font-weight: 700;
             font-size: 1.1rem;
-            color: var(--text-color);
+            color: var(--text-primary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -165,7 +165,7 @@
         }
 
         .reset-btn {
-            background-color: var(--accent-color);
+            background-color: var(--text-primary);
             color: var(--bg-color);
             border: none;
             padding: 12px 30px;
@@ -189,7 +189,7 @@
         .legend {
             margin-top: 30px;
             padding: 20px;
-            background-color: var(--card-bg);
+            background-color: var(--bg-secondary);
             border-radius: 10px;
             box-shadow: var(--shadow);
         }
@@ -224,7 +224,7 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease, padding 0.3s ease;
-            background-color: var(--cell-bg);
+            background-color: var(--bg-secondary);
             border-radius: 8px;
             margin-top: 0;
         }
@@ -238,7 +238,7 @@
         .config-header {
             font-size: 0.85rem;
             font-weight: 600;
-            color: var(--text-color);
+            color: var(--text-primary);
             margin-bottom: 12px;
             text-transform: uppercase;
         }
@@ -249,7 +249,7 @@
             gap: 15px;
             margin-bottom: 12px;
             padding-bottom: 12px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
         }
 
         .config-row:last-child {
@@ -262,17 +262,17 @@
             width: 80px;
             height: 36px;
             padding: 0 10px;
-            border: 2px solid var(--input-border);
+            border: 2px solid var(--border);
             border-radius: 6px;
-            background-color: var(--input-bg);
-            color: var(--text-color);
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
             font-size: 0.95rem;
             text-align: center;
         }
 
         .config-row input:focus {
             outline: none;
-            border-color: var(--accent-color);
+            border-color: var(--text-primary);
         }
 
         .config-label {
@@ -294,7 +294,7 @@
         .config-add-btn {
             flex: 1;
             padding: 8px 15px;
-            background-color: var(--accent-color);
+            background-color: var(--text-primary);
             color: var(--bg-color);
             border: none;
             border-radius: 6px;
@@ -311,7 +311,7 @@
         .config-reset-btn {
             padding: 8px 15px;
             background-color: transparent;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             color: var(--text-secondary);
             border-radius: 6px;
             font-size: 0.85rem;
@@ -320,8 +320,8 @@
         }
 
         .config-reset-btn:hover {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
+            border-color: var(--text-primary);
+            color: var(--text-primary);
         }
 
         .legend-item {
@@ -351,7 +351,7 @@
             padding: 10px;
             background-color: var(--bg-color);
             border-radius: 8px;
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
         }
 
         /* Responsive */
@@ -373,7 +373,7 @@
                 text-align: center;
                 font-size: 1.1rem;
                 padding-bottom: 5px;
-                border-bottom: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border);
             }
 
             .cell-input {
@@ -396,7 +396,7 @@
                 top: -8px;
                 left: 50%;
                 transform: translateX(-50%);
-                background-color: var(--card-bg);
+                background-color: var(--bg-secondary);
                 padding: 0 8px;
                 font-size: 0.65rem;
                 color: var(--text-secondary);
@@ -409,7 +409,7 @@
                 top: -8px;
                 left: 50%;
                 transform: translateX(-50%);
-                background-color: var(--card-bg);
+                background-color: var(--bg-secondary);
                 padding: 0 8px;
                 font-size: 0.65rem;
                 color: var(--text-secondary);

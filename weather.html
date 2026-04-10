@@ -18,7 +18,7 @@
         .weather-loading {
             text-align: center;
             padding: 40px;
-            color: var(--accent-color);
+            color: var(--text-primary);
         }
         .weather-error {
             color: #e74c3c;
@@ -37,13 +37,13 @@
         
         .weather-card {
             background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--border);
             border-radius: 8px;
             padding: 15px;
             transition: border-color 0.2s;
         }
         .weather-card:hover {
-            border-color: var(--accent-color);
+            border-color: var(--text-primary);
         }
         
         /* Grid placement classes */
@@ -65,7 +65,7 @@
             color: var(--text-secondary);
             margin-bottom: 12px;
             padding-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border);
             text-align: center;
         }
         
@@ -106,7 +106,7 @@
         }
         
         .weather-value {
-            color: var(--text-color);
+            color: var(--text-primary);
             font-weight: 600;
             font-family: var(--font-mono);
         }
@@ -114,7 +114,7 @@
         .weather-big {
             font-size: 1.8rem;
             font-weight: 700;
-            color: var(--accent-color);
+            color: var(--text-primary);
             text-align: center;
             margin: 5px 0;
         }
@@ -150,7 +150,7 @@
         }
         .weather-text {
             font-size: 1.1rem;
-            color: var(--text-color);
+            color: var(--text-primary);
         }
         
         /* Location */
@@ -174,7 +174,7 @@
         .location-name {
             font-size: 1.4rem;
             font-weight: 700;
-            color: var(--text-color);
+            color: var(--text-primary);
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -191,7 +191,7 @@
             color: var(--text-secondary);
             background-color: var(--bg-color);
             border-radius: 8px;
-            border: 1px dashed var(--border-color);
+            border: 1px dashed var(--border);
         }
         
         /* UV colors */
@@ -503,7 +503,7 @@
                                 <span class="weather-label">Dusk</span>
                                 <span class="weather-value">${p.dusk}</span>
                             </div>
-                            <div class="weather-row" style="margin-top: 5px; padding-top: 8px; border-top: 1px solid var(--border-color);">
+                            <div class="weather-row" style="margin-top: 5px; padding-top: 8px; border-top: 1px solid var(--border);">
                                 <span class="weather-label">Daylight</span>
                                 <span class="weather-value">${p.daylightDuration}</span>
                             </div>

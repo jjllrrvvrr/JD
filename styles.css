@@ -1,36 +1,59 @@
 /* JD Calculator - Common Styles */
 /* Theme variables */
 :root {
+    /* Colors */
     --bg-color: #f5f5f5;
-    --card-bg: #ffffff;
-    --text-color: #333333;
+    --bg-secondary: #ffffff;
+    --text-primary: #333333;
     --text-secondary: #666666;
-    --border-color: #e0e0e0;
-    --input-bg: #ffffff;
-    --input-border: #cccccc;
-    --accent-color: #333333;
+    --border: #e0e0e0;
     --accent-hover: #1a1a1a;
     --alert-color: #e67e22;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --cell-bg: #f8f9fa;
-    --cell-border: #dee2e6;
+    --success-color: #22c55e;
+    --danger-color: #ef4444;
+    --shadow: 0 2px 8px #0000001A;
+    --shadow-sm: 0 2px 4px #00000033;
+    --danger-color-transparent: #EF44441A;
     --font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', 'Courier New', monospace;
+    
+    /* Dimensions */
+    --border-thin: 1px;
+    --border-width: 2px;
+    --radius-sm: 5px;
+    --radius-md: 8px;
+    --radius-lg: 10px;
+    --space-xs: 9px;
+    --space-sm: 12px;
+    --space-md: 15px;
+    --space-lg: 20px;
+    --space-xl: 30px;
+    --space-2xl: 40px;
+    --text-xs: 0.75rem;
+    --text-sm: 0.85rem;
+    --text-base: 1rem;
+    --text-lg: 1.5rem;
+    --text-xl: 2rem;
+    --container-max: 1000px;
+    --breakpoint-md: 768px;
+    --breakpoint-sm: 480px;
 }
 
 [data-theme="dark"] {
+    /* Colors */
     --bg-color: #1a1a1a;
-    --card-bg: #2d2d2d;
-    --text-color: #e0e0e0;
+    --bg-secondary: #2d2d2d;
+    --text-primary: #e0e0e0;
     --text-secondary: #aaaaaa;
-    --border-color: #404040;
-    --input-bg: #3d3d3d;
-    --input-border: #505050;
-    --accent-color: #e0e0e0;
+    --border: #404040;
     --accent-hover: #f5f5f5;
     --alert-color: #f39c12;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    --cell-bg: #3d3d3d;
-    --cell-border: #505050;
+    --success-color: #4ade80;
+    --danger-color: #f87171;
+    --shadow: 0 2px 8px #0000004D;
+    --shadow-sm: 0 2px 4px #00000066;
+    --danger-color-transparent: #F871711A;
+    
+    /* Dimensions (same as light) */
 }
 
 /* Reset and base */
@@ -43,14 +66,14 @@
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
     background-color: var(--bg-color);
-    color: var(--text-color);
+    color: var(--text-primary);
     min-height: 100vh;
-    padding: 20px;
+    padding: var(--space-lg);
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .container {
-    max-width: 1000px;
+    max-width: var(--container-max);
     margin: 0 auto;
 }
 
@@ -58,50 +81,50 @@ body {
 
 /* Card/Panel containers */
 .card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
-    padding: 25px;
-    margin-bottom: 25px;
+    padding: var(--space-xl);
+    margin-bottom: var(--space-xl);
 }
 
 .card-inner {
     background-color: var(--bg-color);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    padding: 20px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
 }
 
 /* Form elements - Labels */
 .form-label {
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 600;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-sm);
     display: block;
 }
 
 /* Form elements - Inputs */
 .form-input {
-    padding: 12px 15px;
-    border: 2px solid var(--input-border);
-    border-radius: 6px;
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    font-size: 1rem;
+    padding: var(--space-sm) 15px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--text-base);
     width: 100%;
     transition: border-color 0.3s ease;
 }
 
 .form-input:focus {
     outline: none;
-    border-color: var(--accent-color);
+    border-color: var(--text-primary);
 }
 
 .form-input:disabled {
-    background-color: var(--border-color);
+    background-color: var(--border);
     color: var(--text-secondary);
     cursor: not-allowed;
 }
@@ -120,7 +143,7 @@ body {
 
 .form-row {
     display: flex;
-    gap: 30px;
+    gap: var(--space-xl);
     align-items: center;
     flex-wrap: wrap;
     justify-content: center;
@@ -128,12 +151,12 @@ body {
 
 /* Buttons */
 .btn {
-    background-color: var(--accent-color);
+    background-color: var(--text-primary);
     color: var(--bg-color);
     border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
-    font-size: 1rem;
+    padding: var(--space-sm) 30px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.1s ease;
@@ -151,86 +174,86 @@ body {
 
 .btn-outline {
     background-color: transparent;
-    border: 2px solid var(--accent-color);
-    color: var(--accent-color);
+    border: 2px solid var(--text-primary);
+    color: var(--text-primary);
 }
 
 .btn-outline:hover {
-    background-color: var(--accent-color);
+    background-color: var(--text-primary);
     color: var(--bg-color);
 }
 
 .btn-small {
-    padding: 8px 16px;
-    font-size: 0.85rem;
+    padding: var(--space-xs) 16px;
+    font-size: var(--text-sm);
 }
 
 /* Result display boxes */
 .result-box {
-    background-color: var(--accent-color);
+    background-color: var(--text-primary);
     color: var(--bg-color);
-    padding: 25px;
-    border-radius: 10px;
+    padding: var(--space-xl);
+    border-radius: var(--radius-lg);
     text-align: center;
 }
 
 .result-value {
-    font-size: 2rem;
+    font-size: var(--text-xl);
     font-weight: 700;
     font-family: var(--font-mono);
 }
 
 .result-unit {
-    font-size: 1rem;
+    font-size: var(--text-base);
     opacity: 0.8;
 }
 
 .result-label {
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
     text-transform: uppercase;
     letter-spacing: 1px;
     opacity: 0.8;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-sm);
 }
 
 /* Grid layouts */
 .grid-2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: var(--space-lg);
 }
 
 .grid-4 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
+    gap: var(--space-md);
 }
 
 /* Tables */
 .table-container {
-    background-color: var(--card-bg);
-    border-radius: 10px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
     overflow: hidden;
 }
 
 .table-header {
     display: grid;
-    gap: 10px;
-    padding: 15px 20px;
-    background-color: var(--accent-color);
+    gap: var(--space-xs);
+    padding: var(--space-md) 20px;
+    background-color: var(--text-primary);
     color: var(--bg-color);
     font-weight: 600;
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .table-row {
     display: grid;
-    gap: 10px;
-    padding: 12px 20px;
-    border-bottom: 1px solid var(--border-color);
+    gap: var(--space-xs);
+    padding: var(--space-sm) 20px;
+    border-bottom: var(--border-thin) solid var(--border);
     align-items: center;
     transition: background-color 0.2s ease;
 }
@@ -240,24 +263,24 @@ body {
 }
 
 .table-row:hover {
-    background-color: var(--cell-bg);
+    background-color: var(--bg-secondary);
 }
 
 /* Select dropdown */
 .form-select {
-    padding: 12px 15px;
-    border: 2px solid var(--input-border);
-    border-radius: 6px;
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    font-size: 1rem;
+    padding: var(--space-sm) 15px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--text-base);
     min-width: 180px;
     transition: border-color 0.3s ease;
 }
 
 .form-select:focus {
     outline: none;
-    border-color: var(--accent-color);
+    border-color: var(--text-primary);
 }
 
 /* Monospace text */
@@ -267,7 +290,7 @@ body {
 
 /* Unit label */
 .unit-label {
-    font-size: 0.75rem;
+    font-size: var(--text-xs);
     color: var(--text-secondary);
     text-align: center;
     margin-top: 2px;
@@ -275,11 +298,11 @@ body {
 
 /* Section titles */
 .section-title {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 15px;
+    margin-bottom: var(--space-md);
     font-weight: 600;
 }
 
@@ -291,15 +314,15 @@ header {
     align-items: center;
     margin-bottom: 30px;
     padding-bottom: 20px;
-    border-bottom: 2px solid var(--border-color);
-    gap: 15px;
+    border-bottom: var(--border-width) solid var(--border);
+    gap: var(--space-md);
     flex-wrap: nowrap;
 }
 
 .logo-title {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: var(--space-md);
     flex: 1;
     min-width: 0;
 }
@@ -353,14 +376,14 @@ h1 {
 .theme-toggle {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: var(--space-xs);
     flex-shrink: 0;
 }
 
 .toggle-btn {
     width: 60px;
     height: 28px;
-    background-color: var(--border-color);
+    background-color: var(--border);
     border-radius: 14px;
     position: relative;
     cursor: pointer;
@@ -402,17 +425,17 @@ h1 {
     position: absolute;
     width: 22px;
     height: 22px;
-    background-color: white;
+    background-color: var(--bg-secondary);
     border-radius: 50%;
     top: 3px;
     left: 3px;
     transition: transform 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px #00000033;
     z-index: 1;
 }
 
 .toggle-btn[data-active="true"] {
-    background-color: var(--accent-color);
+    background-color: var(--text-primary);
 }
 
 .toggle-btn[data-active="true"]::before {
@@ -429,12 +452,12 @@ h1 {
 
 /* Legacy button styles - for backward compatibility */
 .reset-btn {
-    background-color: var(--accent-color);
-    color: white;
+    background-color: var(--text-primary);
+    color: var(--bg-color);
     border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
-    font-size: 1rem;
+    padding: var(--space-sm) 30px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
     font-weight: 600;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.1s ease;
@@ -452,29 +475,29 @@ h1 {
 
 /* Legacy form elements - for backward compatibility */
 select, input[type="number"] {
-    padding: 12px 15px;
-    border: 2px solid var(--input-border);
-    border-radius: 6px;
-    background-color: var(--input-bg);
-    color: var(--text-color);
-    font-size: 1rem;
+    padding: var(--space-sm) 15px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: var(--text-base);
     transition: border-color 0.3s ease;
 }
 
 select:focus, input[type="number"]:focus {
     outline: none;
-    border-color: var(--accent-color);
+    border-color: var(--text-primary);
 }
 
 /* ===== RESPONSIVE STYLES ===== */
 
-@media (max-width: 768px) {
+@media (max-width: var(--breakpoint-md)) {
     header {
-        gap: 10px;
+        gap: var(--space-xs);
     }
 
     .logo-title {
-        gap: 10px;
+        gap: var(--space-xs);
     }
 
     .logo {
@@ -493,43 +516,43 @@ select:focus, input[type="number"]:focus {
     /* Responsive utility classes */
     .form-row {
         flex-direction: column;
-        gap: 20px;
+        gap: var(--space-lg);
     }
 
     .grid-2 {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: var(--space-md);
     }
 
     .grid-4 {
         grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: var(--space-sm);
     }
 
     .result-value {
-        font-size: 1.8rem;
+        font-size: var(--text-xl);
     }
 
     .card {
-        padding: 20px;
+        padding: var(--space-lg);
     }
 
     .card-inner {
-        padding: 15px;
+        padding: var(--space-md);
     }
 }
 
 @media (max-width: 480px) {
     body {
-        padding: 15px;
+        padding: var(--space-md);
     }
 
     header {
-        gap: 8px;
+        gap: var(--space-xs);
     }
 
     .logo-title {
-        gap: 8px;
+        gap: var(--space-xs);
     }
 
     .logo {
@@ -538,7 +561,7 @@ select:focus, input[type="number"]:focus {
     }
 
     h1 {
-        font-size: 0.85rem;
+        font-size: var(--text-sm);
         letter-spacing: 1px;
     }
 
@@ -561,24 +584,24 @@ select:focus, input[type="number"]:focus {
     }
 
     .form-row {
-        gap: 15px;
+        gap: var(--space-md);
     }
 
     .grid-4 {
         grid-template-columns: 1fr;
-        gap: 10px;
+        gap: var(--space-xs);
     }
 
     .result-value {
-        font-size: 1.5rem;
+        font-size: var(--text-lg);
     }
 
     .card {
-        padding: 15px;
+        padding: var(--space-md);
     }
 
     .form-input, .form-select {
-        padding: 10px 12px;
+        padding: var(--space-xs) 12px;
         font-size: 0.95rem;
     }
 }
@@ -590,16 +613,16 @@ select:focus, input[type="number"]:focus {
     display: flex;
     justify-content: center;
     margin-bottom: 30px;
-    gap: 10px;
+    gap: var(--space-xs);
 }
 
 .tab-btn {
-    padding: 12px 30px;
-    border: 2px solid var(--border-color);
-    background-color: var(--card-bg);
+    padding: var(--space-sm) 30px;
+    border: var(--border-width) solid var(--border);
+    background-color: var(--bg-secondary);
     color: var(--text-secondary);
     border-radius: 50px;
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -608,61 +631,52 @@ select:focus, input[type="number"]:focus {
 }
 
 .tab-btn:hover {
-    border-color: var(--accent-color);
-    color: var(--text-color);
+    border-color: var(--text-primary);
+    color: var(--text-primary);
 }
 
 .tab-btn.active {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
+    background-color: var(--text-primary);
+    border-color: var(--text-primary);
     color: var(--bg-color);
 }
 
-/* Status Colors */
-:root {
-    --success-color: #22c55e;
-    --danger-color: #ef4444;
-}
 
-[data-theme="dark"] {
-    --success-color: #4ade80;
-    --danger-color: #f87171;
-}
 
 /* Error Message */
 .error-message {
-    color: #e74c3c;
-    font-size: 0.9rem;
+    color: var(--danger-color);
+    font-size: var(--text-sm);
     margin: 15px 0;
-    padding: 12px 16px;
-    background-color: rgba(231, 76, 60, 0.1);
-    border-radius: 8px;
-    border-left: 4px solid #e74c3c;
+    padding: var(--space-sm) 16px;
+    background-color: var(--danger-color-transparent);
+    border-radius: var(--radius-md);
+    border-left: 4px solid var(--danger-color);
 }
 
 /* History List */
 .history-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: var(--space-xs);
 }
 
 .history-item {
     display: grid;
     grid-template-columns: 1fr auto auto;
-    gap: 15px;
+    gap: var(--space-md);
     align-items: center;
     padding: 14px 18px;
     background-color: var(--bg-color);
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    border: var(--border-thin) solid var(--border);
     font-family: var(--font-mono);
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     transition: border-color 0.2s;
 }
 
 .history-item:hover {
-    border-color: var(--accent-color);
+    border-color: var(--text-primary);
 }
 
 .history-coords {
@@ -671,41 +685,41 @@ select:focus, input[type="number"]:focus {
 }
 
 .history-result {
-    color: var(--accent-color);
+    color: var(--text-primary);
     font-weight: 700;
     white-space: nowrap;
 }
 
 .history-bearing {
-    color: var(--text-color);
+    color: var(--text-primary);
     white-space: nowrap;
 }
 
 /* Legend System */
 .legend {
     background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 15px;
+    border: var(--border-thin) solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-md);
     margin-top: 20px;
 }
 
 .legend-header {
-    font-size: 0.85rem;
+    font-size: var(--text-sm);
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 12px;
     padding-bottom: 8px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: var(--border-thin) solid var(--border);
 }
 
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 8px;
-    font-size: 0.9rem;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
+    font-size: var(--text-sm);
 }
 
 /* Tool/Link Grid */
@@ -713,7 +727,7 @@ select:focus, input[type="number"]:focus {
 .links-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
+    gap: var(--space-lg);
     margin-top: 40px;
 }
 
@@ -724,12 +738,12 @@ select:focus, input[type="number"]:focus {
     flex-direction: column;
     align-items: center;
     padding: 40px 30px;
-    background-color: var(--card-bg);
-    border: 2px solid var(--border-color);
+    background-color: var(--bg-secondary);
+    border: var(--border-width) solid var(--border);
     border-radius: 12px;
     text-align: center;
     text-decoration: none;
-    color: var(--text-color);
+    color: var(--text-primary);
     transition: all 0.3s ease;
     cursor: pointer;
 }
@@ -737,8 +751,8 @@ select:focus, input[type="number"]:focus {
 .tool-card:hover,
 .link-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    border-color: var(--accent-color);
+    box-shadow: 0 8px 24px var(--shadow-sm);
+    border-color: var(--text-primary);
 }
 
 .tool-icon {
@@ -749,8 +763,8 @@ select:focus, input[type="number"]:focus {
 .tool-card .arrow,
 .link-arrow {
     margin-top: 20px;
-    font-size: 1.5rem;
-    color: var(--accent-color);
+    font-size: var(--text-lg);
+    color: var(--text-primary);
     transition: transform 0.3s ease;
 }
 
@@ -762,38 +776,38 @@ select:focus, input[type="number"]:focus {
 /* Link Category Card */
 .link-category {
     background-color: var(--bg-color);
-    border: 2px solid var(--border-color);
-    border-radius: 10px;
-    padding: 25px;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
 }
 
 .category-title {
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: 600;
     margin-bottom: 20px;
     padding-bottom: 12px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: var(--border-thin) solid var(--border);
 }
 
 /* Config Panel */
 .config-panel {
     background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border: var(--border-thin) solid var(--border);
+    border-radius: var(--radius-md);
     overflow: hidden;
     margin-top: 20px;
 }
 
 .config-toggle {
     width: 100%;
-    padding: 15px 20px;
+    padding: var(--space-md) 20px;
     background: none;
     border: none;
-    color: var(--text-color);
-    font-size: 1rem;
+    color: var(--text-primary);
+    font-size: var(--text-base);
     font-weight: 600;
     cursor: pointer;
     display: flex;
@@ -804,38 +818,38 @@ select:focus, input[type="number"]:focus {
 .config-row {
     display: grid;
     grid-template-columns: 100px 80px 80px 80px 80px auto;
-    gap: 10px;
+    gap: var(--space-xs);
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border-color);
+    padding: var(--space-xs) 0;
+    border-bottom: var(--border-thin) solid var(--border);
 }
 
 /* Converter Layout */
 .converter-layout {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 20px;
+    gap: var(--space-lg);
     align-items: end;
 }
 
 .swap-btn {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    border: 2px solid var(--accent-color);
-    background-color: var(--card-bg);
-    color: var(--accent-color);
+    border-radius: var(--radius-full);
+    border: 2px solid var(--text-primary);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
     font-size: 1.2rem;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    margin-bottom: 8px;
+    margin-bottom: var(--space-sm);
 }
 
 .swap-btn:hover {
-    background-color: var(--accent-color);
+    background-color: var(--text-primary);
     color: var(--bg-color);
     transform: rotate(180deg);
 }
@@ -844,7 +858,7 @@ select:focus, input[type="number"]:focus {
 .quick-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 10px;
+    gap: var(--space-xs);
     margin-top: 15px;
 }
 
@@ -860,14 +874,14 @@ select:focus, input[type="number"]:focus {
 /* Info Section */
 .info-section {
     background-color: var(--bg-color);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 20px;
+    border: var(--border-thin) solid var(--border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
     margin-top: 20px;
 }
 
 .info-block {
-    margin-bottom: 15px;
+    margin-bottom: var(--space-md);
 }
 
 .info-block:last-child {
@@ -884,37 +898,37 @@ select:focus, input[type="number"]:focus {
 }
 
 /* UV Index Colors */
-.uv-low { color: #27ae60; }
-.uv-moderate { color: #f1c40f; }
-.uv-high { color: #e67e22; }
-.uv-very-high { color: #e74c3c; }
+.uv-low { color: var(--success-color); }
+.uv-moderate { color: var(--alert-color); }
+.uv-high { color: var(--alert-color); }
+.uv-very-high { color: var(--danger-color); }
 
 /* Formula Display */
 .formula-note {
     background-color: var(--bg-color);
-    border-left: 4px solid var(--accent-color);
-    padding: 15px 20px;
+    border-left: 4px solid var(--text-primary);
+    padding: var(--space-md) 20px;
     margin-top: 20px;
     font-family: var(--font-mono);
-    font-size: 0.9rem;
+    font-size: var(--text-sm);
 }
 
 /* Intro Section */
 .intro {
     text-align: center;
     margin: 40px 0;
-    padding: 20px;
+    padding: var(--space-lg);
 }
 
 .intro h2 {
     font-size: 1.3rem;
     font-weight: 600;
-    color: var(--text-color);
-    margin-bottom: 15px;
+    color: var(--text-primary);
+    margin-bottom: var(--space-md);
 }
 
 .intro p {
-    font-size: 1rem;
+    font-size: var(--text-base);
     color: var(--text-secondary);
     max-width: 600px;
     margin: 0 auto;
@@ -938,7 +952,7 @@ select:focus, input[type="number"]:focus {
 }
 
 .github-link:hover {
-    color: var(--accent-color);
+    color: var(--text-primary);
     transform: scale(1.1);
 }
 
