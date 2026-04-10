@@ -129,7 +129,7 @@ body {
 /* Buttons */
 .btn {
     background-color: var(--accent-color);
-    color: white;
+    color: var(--bg-color);
     border: none;
     padding: 12px 30px;
     border-radius: 6px;
