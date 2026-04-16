@@ -248,6 +248,34 @@
             color: var(--text-primary);
         }
 
+        /* Serial results display */
+        .serial-results {
+            margin-top: 20px;
+        }
+
+        .serial-block {
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .serial-block h4 {
+            font-size: 1rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .serial-shots {
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
         @media (max-width: 768px) {
             #gameCanvas {
                 width: 100%;
@@ -296,7 +324,7 @@
                         <label>Number of targets</label>
                         <div class="pill-buttons">
                             <button class="pill-btn" data-count="10">10</button>
-                            <button class="pill-btn" data-count="25">25</button>
+                            <button class="pill-btn" data-count="30">30</button>
                             <button class="pill-btn active" data-count="50">50</button>
                             <button class="pill-btn" data-count="100">100</button>
                         </div>
@@ -395,6 +423,12 @@
         let targetCount = 50;
         let displayTime = 3;
         let gameMode = 'single';
+        
+        // Serial system variables
+        let currentSerial = 1;
+        let shotsInSerial = 0;
+        let totalSerials = 0;
+        let serialResults = {};
 
         // Config panel toggle
         document.getElementById('configToggle').addEventListener('click', () => {
@@ -596,9 +630,15 @@
             isRunning = true;
             abortController = new AbortController();
             results = [];
+            serialResults = {};
             document.getElementById("results").innerHTML = "";
             document.getElementById("startBtn").textContent = "STOP";
             document.getElementById("startBtn").style.backgroundColor = "#e74c3c";
+            
+            // Calculate total serials
+            totalSerials = Math.ceil(targetCount / 10);
+            currentSerial = 1;
+            shotsInSerial = 0;
 
             try {
                 document.getElementById("message").innerText = "Spotter ready...";
@@ -615,6 +655,25 @@
 
                 for (let i = 0; i < targetCount; i++) {
                     if (!isRunning) return;
+                    
+                    // Check if we need to start a new Serial
+                    if (i % 10 === 0) {
+                        currentSerial = Math.floor(i / 10) + 1;
+                        shotsInSerial = 0;
+                        
+                        // Initialize serial results
+                        if (!serialResults[currentSerial]) {
+                            serialResults[currentSerial] = [];
+                        }
+                        
+                        // Display Serial number
+                        document.getElementById("message").innerText = `Serial ${currentSerial}`;
+                        await wait(1500);
+                        if (!isRunning) return;
+                        
+                        // Show Serial message during the serial
+                        document.getElementById("message").innerText = `Serial ${currentSerial} - In Progress`;
+                    }
 
                     ctx.clearRect(0, 0, 500, 500);
                     drawTargetBorder();
@@ -642,19 +701,41 @@
                         if (!isRunning) return;
 
                         // Combine both corrections
-                        results.push(`Shot ${i+1}: <span class="correction">${correction1}; ${correction2}</span>`);
+                        serialResults[currentSerial].push(`Shot ${i+1}: <span class="correction">${correction1}; ${correction2}</span>`);
                     } else {
                         // Single shot mode
-                        results.push(`Shot ${i+1}: <span class="correction">${correction1}</span>`);
+                        serialResults[currentSerial].push(`Shot ${i+1}: <span class="correction">${correction1}</span>`);
                     }
+                    
+                    shotsInSerial++;
                     
                     ctx.clearRect(0, 0, 500, 500);
                     await wait(500);
                     if (!isRunning) return;
+                    
+                     // Check if we need a pause between Serials
+                     if (shotsInSerial === 10 && i < targetCount - 1) {
+                         // Pause between Serials
+                         await showPauseBetweenSerials();
+                         if (!isRunning) return;
+                         
+                         // Restart the sequence for new Serial
+                         document.getElementById("message").innerText = "Spotter ready...";
+                         await wait(1000);
+                         if (!isRunning) return;
+
+                         document.getElementById("message").innerText = "Sniper ready...";
+                         await wait(1000);
+                         if (!isRunning) return;
+
+                         document.getElementById("message").innerText = "FIRE!";
+                         await wait(800);
+                         if (!isRunning) return;
+                     }
                 }
 
                 document.getElementById("message").innerText = "Test Complete";
-                document.getElementById("results").innerHTML = results.join("<br>");
+                displaySerialResults();
             } catch (e) {
                 if (e.message === 'Aborted') {
                     return;
@@ -667,6 +748,73 @@
                 btn.textContent = "START";
                 btn.style.backgroundColor = "";
             }
+        }
+
+        async function showPauseBetweenSerials() {
+            const pauseDuration = 8000; // 8 seconds
+            const startTime = Date.now();
+            
+            document.getElementById("message").innerText = "Pause between Serials...";
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, 500, 500);
+            
+            const centerX = 250;
+            const centerY = 250;
+            const radius = 80;
+            const lineWidth = 20;
+            const startAngle = -Math.PI / 2; // Start at 12 o'clock
+            
+            // Get theme color
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const darkColor = isDark ? '#404040' : '#808080';
+            
+            // Draw donut gauge
+            while (Date.now() - startTime < pauseDuration) {
+                if (!isRunning) return;
+                
+                const elapsed = Date.now() - startTime;
+                const progress = elapsed / pauseDuration;
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, 500, 500);
+                
+                // Draw full circle background (gris clair)
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.strokeStyle = isDark ? '#2a2a2a' : '#d0d0d0';
+                ctx.lineWidth = lineWidth;
+                ctx.stroke();
+                
+                // Draw the "filled" part that disappears (gris foncé s'efface)
+                const disappearingAngle = 2 * Math.PI * progress; // Augmente avec le temps
+                if (disappearingAngle > 0.01) {
+                    ctx.beginPath();
+                    ctx.arc(centerX, centerY, radius, startAngle, startAngle + disappearingAngle);
+                    ctx.strokeStyle = darkColor; // Gris foncé qui s'efface
+                    ctx.lineWidth = lineWidth;
+                    ctx.lineCap = "round";
+                    ctx.stroke();
+                }
+                
+                await wait(50);
+            }
+        }
+
+        function displaySerialResults() {
+            let html = '<div class="serial-results">';
+            
+            for (let serialNum = 1; serialNum <= totalSerials; serialNum++) {
+                if (serialResults[serialNum] && serialResults[serialNum].length > 0) {
+                    html += `<div class="serial-block">`;
+                    html += `<h4>Serial ${serialNum}</h4>`;
+                    html += `<div class="serial-shots">${serialResults[serialNum].join("<br>")}</div>`;
+                    html += `</div>`;
+                }
+            }
+            
+            html += '</div>';
+            document.getElementById("results").innerHTML = html;
         }
 
         function stopGame() {

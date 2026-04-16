@@ -313,7 +313,7 @@
         themeToggle.addEventListener('click', toggleTheme);
 
         function parseWeatherData(data) {
-            const parts = data.trim().split(/\s+/);
+            const parts = data.trim().split('|');
             
             const windRaw = parts[5] || '';
             const windMatch = windRaw.match(/^([←→↑↓↙↘↗↖]+)?(\d+)(km\/h|mph)$/);
@@ -338,7 +338,7 @@
             else if (uv > 5) { uvClass = 'uv-high'; uvText = 'High'; }
             else if (uv > 2) { uvClass = 'uv-moderate'; uvText = 'Moderate'; }
             
-            // Format: %c %C %h %t %f %w %l %m %M %p %P %u %D %s %z %S %d %T %Z
+            // Format: %c|%C|%h|%t|%f|%w|%l|%m|%M|%p|%P|%u|%D|%s|%z|%S|%d|%T|%Z
             // Indices:  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18
             
             // Calculate daylight duration from sunrise and sunset
@@ -367,13 +367,17 @@
             let sunrise = parts[15] || ''; // Using Sunset index for Sunrise (corrected)
             let sunset = parts[13] || ''; // Using Sunrise index for Sunset (corrected)
             
-            // Fallback: detect by time value if still wrong
+            // Fallback: detect by time value (sunrise should be AM, sunset should be PM)
             try {
-                const [hSunrise] = sunrise.split(':').map(Number);
-                const [hSunset] = sunset.split(':').map(Number);
-                // If sunrise hour > sunset hour, swap them
-                if (hSunrise > hSunset) {
-                    [sunrise, sunset] = [sunset, sunrise];
+                const sunriseMatch = sunrise.match(/(\d+):(\d+)/);
+                const sunsetMatch = sunset.match(/(\d+):(\d+)/);
+                if (sunriseMatch && sunsetMatch) {
+                    const sunriseHour = parseInt(sunriseMatch[1]);
+                    const sunsetHour = parseInt(sunsetMatch[1]);
+                    // If sunrise hour is afternoon (>12), it's actually sunset
+                    if (sunriseHour > 12) {
+                        [sunrise, sunset] = [sunset, sunrise];
+                    }
                 }
             } catch (e) {
                 // Keep values if parsing fails
@@ -530,7 +534,7 @@
             
             resultDiv.innerHTML = '<div class="weather-loading">Loading...</div>';
             
-            const format = "%c %C %h %t %f %w %l %m %M %p %P %u %D %s %z %S %d %T %Z";
+            const format = "%c|%C|%h|%t|%f|%w|%l|%m|%M|%p|%P|%u|%D|%s|%z|%S|%d|%T|%Z";
             const url = "https://wttr.in/" + encodeURIComponent(city) + "?format=" + format + "&lang=en";
             
             fetch(url)
